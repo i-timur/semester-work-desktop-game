@@ -5,12 +5,12 @@ public class Map {
     {Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE},
     {Block.STONE, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.STONE},
     {Block.STONE, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.STONE},
+    {Block.STONE, Block.EMPTY, Block.EMPTY, Block.STONE, Block.STONE, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.STONE},
     {Block.STONE, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.STONE},
     {Block.STONE, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.STONE},
+    {Block.STONE, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.STONE, Block.EMPTY, Block.EMPTY, Block.STONE},
     {Block.STONE, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.STONE},
-    {Block.STONE, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.STONE},
-    {Block.STONE, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.STONE},
-    {Block.STONE, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.STONE},
+    {Block.STONE, Block.EMPTY, Block.EMPTY, Block.STONE, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.EMPTY, Block.STONE},
     {Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE}
   };
 }
