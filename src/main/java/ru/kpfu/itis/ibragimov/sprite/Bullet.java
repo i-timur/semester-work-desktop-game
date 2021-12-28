@@ -1,7 +1,5 @@
-package ru.kpfu.itis.ibragimov.model;
+package ru.kpfu.itis.ibragimov.sprite;
 
-import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import ru.kpfu.itis.ibragimov.util.Direction;
 

@@ -1,35 +1,14 @@
 package ru.kpfu.itis.ibragimov;
 
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import ru.kpfu.itis.ibragimov.model.Bullet;
-import ru.kpfu.itis.ibragimov.model.EnemyTank;
-import ru.kpfu.itis.ibragimov.model.PlayerTank;
-import ru.kpfu.itis.ibragimov.util.Block;
-import ru.kpfu.itis.ibragimov.util.Direction;
-import ru.kpfu.itis.ibragimov.util.Map;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main extends Application {
 
@@ -47,14 +26,14 @@ public class Main extends Application {
     this.score = score;
   }
 
-  Game game;
+  SinglePlayer singlePlayer;
+  MultiPlayer multiPlayer;
 
   Stage stage;
 
   private AnchorPane root;
   private Button single;
   private Button multi;
-  private Button chat;
   private Button quit;
   private Text recordText;
   private Font font = new Font(18);
@@ -67,7 +46,7 @@ public class Main extends Application {
     single = new Button("Single");
     single.setFont(font);
     single.setLayoutX(BUTTON_X);
-    single.setLayoutY(56.0);
+    single.setLayoutY(106.0);
     single.setPrefWidth(BUTTON_WIDTH);
     single.setPrefHeight(BUTTON_HEIGHT);
     single.setFocusTraversable(false);
@@ -75,23 +54,15 @@ public class Main extends Application {
     multi = new Button("Multi");
     multi.setFont(font);
     multi.setLayoutX(BUTTON_X);
-    multi.setLayoutY(123.0);
+    multi.setLayoutY(173.0);
     multi.setPrefWidth(BUTTON_WIDTH);
     multi.setPrefHeight(BUTTON_HEIGHT);
     multi.setFocusTraversable(false);
     root.getChildren().add(multi);
-    chat = new Button("Chat");
-    chat.setFont(font);
-    chat.setLayoutX(BUTTON_X);
-    chat.setLayoutY(189.0);
-    chat.setPrefWidth(BUTTON_WIDTH);
-    chat.setPrefHeight(BUTTON_HEIGHT);
-    chat.setFocusTraversable(false);
-    root.getChildren().add(chat);
     quit = new Button("Quit");
     quit.setFont(font);
     quit.setLayoutX(BUTTON_X);
-    quit.setLayoutY(256.0);
+    quit.setLayoutY(238.0);
     quit.setPrefWidth(BUTTON_WIDTH);
     quit.setPrefHeight(BUTTON_HEIGHT);
     quit.setFocusTraversable(false);
@@ -105,21 +76,26 @@ public class Main extends Application {
     root.getChildren().add(recordText);
 
     single.setOnAction(event -> {
-      game = new Game();
-      game.setMain(this);
+      singlePlayer = new SinglePlayer();
+      singlePlayer.setMain(this);
       try {
-        stage.setScene(game.start());
+        stage.setScene(singlePlayer.start());
         stage.show();
-        System.out.println("Changed scene!");
+        System.out.println("Showed single player!");
       } catch (Exception exception) {
         exception.printStackTrace();
       }
     });
     multi.setOnAction(event -> {
-
-    });
-    chat.setOnAction(event -> {
-
+      multiPlayer = new MultiPlayer();
+      multiPlayer.setMain(this);
+      try {
+        stage.setScene(multiPlayer.start());
+        stage.show();
+        System.out.println("Showed multi player!");
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     });
     quit.setOnAction(event -> {
       stage.close();

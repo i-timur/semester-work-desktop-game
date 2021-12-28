@@ -9,10 +9,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
-import ru.kpfu.itis.ibragimov.model.Bullet;
-import ru.kpfu.itis.ibragimov.model.EnemyTank;
-import ru.kpfu.itis.ibragimov.model.PlayerTank;
+import ru.kpfu.itis.ibragimov.sprite.Bullet;
+import ru.kpfu.itis.ibragimov.sprite.EnemyTank;
+import ru.kpfu.itis.ibragimov.sprite.PlayerTank;
 import ru.kpfu.itis.ibragimov.util.Block;
 import ru.kpfu.itis.ibragimov.util.Direction;
 import ru.kpfu.itis.ibragimov.util.Map;
@@ -20,7 +19,7 @@ import ru.kpfu.itis.ibragimov.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game {
+public class SinglePlayer {
 
   Main main;
 
@@ -148,6 +147,10 @@ public class Game {
         bullet.move(playerTank.getDirection());
         playerBullets.add(bullet);
         playField.getChildren().add(bullet.getRectangle());
+      } else if (event.getCode() == KeyCode.ESCAPE) {
+        animationTimer.stop();
+        main.setScore(score);
+        main.backToMenu();
       }
     });
 
@@ -211,10 +214,10 @@ public class Game {
       if (bullet.isAlive) {
         bullet.intersects(grid);
         enemies.forEach(enemy -> {
-          if (enemy != null) {
+          if (enemy.isAlive) {
             if (bullet.intersects(enemy.getRectangle())) {
               playField.getChildren().remove(enemy.getRectangle());
-              enemies.remove(enemy);
+              enemy.setAlive(false);
               bullet.setAlive(false);
               playField.getChildren().remove(bullet.getRectangle());
               score += 1;
@@ -252,21 +255,23 @@ public class Game {
 
   public void shoot(EnemyTank who) {
     Bullet enemyBullet = new Bullet();
-    if (who.getDirection() == Direction.UP || who.getDirection() == Direction.DOWN) {
-      enemyBullet.setX(who.getX() + who.getWidth() / 2 - 5);
-      enemyBullet.setY(who.getY());
-      enemyBullet.setWidth(10);
-      enemyBullet.setHeight(20);
-    } else if (who.getDirection() == Direction.RIGHT || who.getDirection() == Direction.LEFT) {
-      enemyBullet.setX(who.getX());
-      enemyBullet.setY(who.getY() + who.getHeight() / 2 - 5);
-      enemyBullet.setWidth(20);
-      enemyBullet.setHeight(10);
+    if (who.isAlive) {
+      if (who.getDirection() == Direction.UP || who.getDirection() == Direction.DOWN) {
+        enemyBullet.setX(who.getX() + who.getWidth() / 2 - 5);
+        enemyBullet.setY(who.getY());
+        enemyBullet.setWidth(10);
+        enemyBullet.setHeight(20);
+      } else if (who.getDirection() == Direction.RIGHT || who.getDirection() == Direction.LEFT) {
+        enemyBullet.setX(who.getX());
+        enemyBullet.setY(who.getY() + who.getHeight() / 2 - 5);
+        enemyBullet.setWidth(20);
+        enemyBullet.setHeight(10);
+      }
+      enemyBullet.createRectangle();
+      enemyBullet.getRectangle().setFill(Color.RED);
+      enemyBullet.move(who.getDirection());
+      enemiesBullets.add(enemyBullet);
+      playField.getChildren().add(enemyBullet.getRectangle());
     }
-    enemyBullet.createRectangle();
-    enemyBullet.getRectangle().setFill(Color.RED);
-    enemyBullet.move(who.getDirection());
-    enemiesBullets.add(enemyBullet);
-    playField.getChildren().add(enemyBullet.getRectangle());
   }
 }
