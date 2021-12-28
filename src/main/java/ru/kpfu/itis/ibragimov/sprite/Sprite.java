@@ -1,4 +1,4 @@
-package ru.kpfu.itis.ibragimov.model;
+package ru.kpfu.itis.ibragimov.sprite;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -98,10 +98,10 @@ public abstract class Sprite {
   }
 
   public boolean intersects(Rectangle rectangle) {
-    if (this.x + this.width < rectangle.getX() ||
-      rectangle.getX() + rectangle.getWidth() < this.x ||
-      this.y + this.height < rectangle.getY() ||
-      rectangle.getY() + rectangle.getHeight() < this.y
+    if (this.x + this.width <= rectangle.getX() ||
+      rectangle.getX() + rectangle.getWidth() <= this.x ||
+      this.y + this.height <= rectangle.getY() ||
+      rectangle.getY() + rectangle.getHeight() <= this.y
     ) {
       return false;
     }
