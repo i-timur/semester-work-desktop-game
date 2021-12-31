@@ -37,6 +37,10 @@ public abstract class Sprite {
     return direction;
   }
 
+  public void setDirection(Direction direction) {
+    this.direction = direction;
+  }
+
   public double getWidth() {
     return width;
   }
@@ -52,6 +56,22 @@ public abstract class Sprite {
     if (imagePattern == null) {
       rectangle.setFill(Color.GREEN);
     }
+  }
+
+  public double getPrevX() {
+    return prevX;
+  }
+
+  public void setPrevX(double prevX) {
+    this.prevX = prevX;
+  }
+
+  public double getPrevY() {
+    return prevY;
+  }
+
+  public void setPrevY(double prevY) {
+    this.prevY = prevY;
   }
 
   public void setX(double x) {

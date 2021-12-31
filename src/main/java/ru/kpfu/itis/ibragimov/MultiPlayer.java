@@ -9,6 +9,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -18,6 +19,7 @@ import ru.kpfu.itis.ibragimov.client.GameClient;
 import ru.kpfu.itis.ibragimov.sprite.Bullet;
 import ru.kpfu.itis.ibragimov.sprite.EnemyTank;
 import ru.kpfu.itis.ibragimov.sprite.PlayerTank;
+import ru.kpfu.itis.ibragimov.sprite.Sprite;
 import ru.kpfu.itis.ibragimov.util.Block;
 import ru.kpfu.itis.ibragimov.util.Direction;
 import ru.kpfu.itis.ibragimov.util.Map;
@@ -69,6 +71,14 @@ public class MultiPlayer {
   private int SPOTS = 10;
   private int SQUARE_SIZE = SIZE / SPOTS;
 
+  public EnemyTank getEnemyTank() {
+    return enemyTank;
+  }
+
+  public Pane getPlayField() {
+    return playField;
+  }
+
   private void initClientConfig() {
     clientConfig = new ClientConfig();
     clientConfigRoot = new AnchorPane();
@@ -89,10 +99,12 @@ public class MultiPlayer {
     hostField = new TextField();
     hostField.setLayoutX(219.0);
     hostField.setLayoutY(116.0);
+    hostField.setText("127.0.0.1");
     clientConfigRoot.getChildren().add(hostField);
     portField = new TextField();
     portField.setLayoutX(219.0);
     portField.setLayoutY(187.0);
+    portField.setText("5555");
     clientConfigRoot.getChildren().add(portField);
     submit = new Button("Подтвердить");
     submit.setFont(font);
@@ -113,11 +125,6 @@ public class MultiPlayer {
       } catch (IOException e) {
         e.printStackTrace();
       }
-      enemyTank = new EnemyTank();
-      enemyTank.setWidth(SQUARE_SIZE);
-      enemyTank.setHeight(SQUARE_SIZE);
-      enemyTank.createRectangle();
-      playField.getChildren().add(enemyTank.getRectangle());
 
       animationTimer = new AnimationTimer() {
         @Override
@@ -139,8 +146,14 @@ public class MultiPlayer {
   }
 
   public void setEnemyTankPosition(double x, double y) {
+    enemyTank.setPrevX(enemyTank.getX());
+    enemyTank.setPrevY(enemyTank.getY());
     enemyTank.setX(x);
     enemyTank.setY(y);
+  }
+
+  public void setEnemyTankDirection(Direction direction) {
+    enemyTank.setDirection(direction);
   }
 
   private void initPlayField() {
@@ -183,7 +196,44 @@ public class MultiPlayer {
     }
     playField.setStyle("-fx-background-color: #000");
 
+    enemyTank = new EnemyTank();
+    enemyTank.setX(-100);
+    enemyTank.setY(-100);
+    enemyTank.setWidth(SQUARE_SIZE);
+    enemyTank.setHeight(SQUARE_SIZE);
+    enemyTank.createRectangle();
+    playField.getChildren().add(enemyTank.getRectangle());
+
     root.setCenter(playField);
+  }
+
+  public void shoot(Sprite s) {
+    Bullet bullet = new Bullet();
+    Direction dir = s.getDirection();
+    if (dir == Direction.DOWN || dir == Direction.UP) {
+      bullet.setX(s.getX() + s.getWidth() / 2 - 5);
+      bullet.setY(s.getY());
+      bullet.setWidth(10);
+      bullet.setHeight(20);
+    } else if (dir == Direction.LEFT || dir == Direction.RIGHT) {
+      bullet.setX(s.getX());
+      bullet.setY(s.getY() + s.getHeight() / 2 - 5);
+      bullet.setWidth(20);
+      bullet.setHeight(10);
+    }
+    bullet.createRectangle();
+    bullet.move(s.getDirection());
+    if (s instanceof PlayerTank) {
+      bullet.getRectangle().setFill(Color.GREEN);
+      playerBullets.add(bullet);
+      String newBulletMessage = "bullet" + " " + bullet.getX() + " " + bullet.getY() + " " + playerTank.getDirection().toString().toLowerCase();
+      gameClient.sendMessage(newBulletMessage);
+    } else if (s instanceof EnemyTank) {
+      bullet.getRectangle().setFill(Color.RED);
+      enemyBullets.add(bullet);
+    }
+
+    playField.getChildren().add(bullet.getRectangle());
   }
 
   public void initEventHandlers() {
@@ -197,24 +247,11 @@ public class MultiPlayer {
       } else if (event.getCode() == KeyCode.S) {
         playerTank.changeDirectionAndMove(Direction.DOWN);
       } else if (event.getCode() == KeyCode.SPACE) {
-        Bullet bullet = new Bullet();
-        if (playerTank.getDirection() == Direction.UP || playerTank.getDirection() == Direction.DOWN) {
-          bullet.setX(playerTank.getX() + playerTank.getWidth() / 2 - 5);
-          bullet.setY(playerTank.getY());
-          bullet.setWidth(10);
-          bullet.setHeight(20);
-        } else if (playerTank.getDirection() == Direction.RIGHT || playerTank.getDirection() == Direction.LEFT) {
-          bullet.setX(playerTank.getX());
-          bullet.setY(playerTank.getY() + playerTank.getHeight() / 2 - 5);
-          bullet.setWidth(20);
-          bullet.setHeight(10);
-        }
-        bullet.createRectangle();
-        bullet.move(playerTank.getDirection());
-        playerBullets.add(bullet);
-        playField.getChildren().add(bullet.getRectangle());
+        shoot(playerTank);
       } else if (event.getCode() == KeyCode.ESCAPE) {
         animationTimer.stop();
+        gameClient = null;
+
         main.backToMenu();
       }
     });
@@ -243,14 +280,34 @@ public class MultiPlayer {
 
     enemyTank.getRectangle().setX(enemyTank.getX());
     enemyTank.getRectangle().setY(enemyTank.getY());
+    enemyTank.changeDirection(enemyTank.getDirection());
 
-    String message = "enemy " + playerTank.getX() + " " + playerTank.getY();
+    String message = "enemy " + playerTank.getX() + " " + playerTank.getY() + " " + playerTank.getDirection().toString().toLowerCase();
     gameClient.sendMessage(message);
 
 
     playerBullets.forEach(bullet -> {
       if (bullet.isAlive) {
         bullet.intersects(grid);
+
+        bullet.update();
+        bullet.getRectangle().setX(bullet.getX());
+        bullet.getRectangle().setY(bullet.getY());
+      } else {
+        playField.getChildren().remove(bullet.getRectangle());
+      }
+    });
+
+    enemyBullets.forEach(bullet -> {
+      if (bullet.isAlive) {
+        bullet.intersects(grid);
+
+        if (bullet.intersects(playerTank.getRectangle())) {
+          playField.getChildren().remove(playerTank.getRectangle());
+          gameClient.sendMessage("status . . lost");
+
+          main.backToMenu();
+        }
 
         bullet.update();
         bullet.getRectangle().setX(bullet.getX());

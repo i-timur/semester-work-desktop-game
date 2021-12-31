@@ -23,9 +23,9 @@ public class GameClient {
 
   public void sendMessage(String message) {
     try {
-      clientThread.getOutput().write(message);
+      clientThread.getOutput().write(message + "\n");
       clientThread.getOutput().flush();
-      System.out.println("Send message: " + message);
+      System.out.println("Sent message: " + message);
     } catch (IOException e) {
       e.printStackTrace();
     }

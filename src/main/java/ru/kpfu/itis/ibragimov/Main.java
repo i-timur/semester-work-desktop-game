@@ -98,7 +98,7 @@ public class Main extends Application {
       }
     });
     quit.setOnAction(event -> {
-      stage.close();
+      System.exit(0);
     });
   }
 

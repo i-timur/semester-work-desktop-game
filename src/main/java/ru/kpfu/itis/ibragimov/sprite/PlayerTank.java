@@ -6,6 +6,7 @@ import ru.kpfu.itis.ibragimov.util.Direction;
 
 public class PlayerTank extends Tank {
 
+
   private int SPEED = 1;
 
   public PlayerTank() {

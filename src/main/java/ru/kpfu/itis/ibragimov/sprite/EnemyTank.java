@@ -17,6 +17,23 @@ public class EnemyTank extends Tank {
     imagePattern = new ImagePattern(new Image("/image/red-tank-up.gif"));
   }
 
+  public void changeDirection(Direction direction) {
+    switch (direction) {
+      case UP:
+        rectangle.setFill(new ImagePattern(new Image("/image/red-tank-up.gif")));
+        break;
+      case DOWN:
+        rectangle.setFill(new ImagePattern(new Image("/image/red-tank-down.gif")));
+        break;
+      case RIGHT:
+        rectangle.setFill(new ImagePattern(new Image("/image/red-tank-right.gif")));
+        break;
+      case LEFT:
+        rectangle.setFill(new ImagePattern(new Image("/image/red-tank-left.gif")));
+        break;
+    }
+  }
+
   public void changeDirectionAndMove(Direction direction) {
     super.direction = direction;
     switch (direction) {
